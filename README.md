@@ -68,7 +68,9 @@ The final step is to implement the `delete` method in the `FileManager` class. T
 
 - Delete the file with the unique ID as the file name.
 
-Once you have implemented this method, create a new test in `test.py` to ensure that it works correctly. 🙌### Step 7: Test Your Implementation 🧪
+Once you have implemented this method, create a new test in `test.py` to ensure that it works correctly. 🙌
+
+### Step 7: Test Your Implementation 🧪
 
 Once you have implemented all the methods, run the tests in `test.py` to ensure that your implementation works correctly. If all the tests pass, congratulations! 🎉 You have successfully built a file manager for your game development company! 🎮
 
