@@ -1,5 +1,6 @@
+import pickle
 from typing import Generator, Any
-from data_manager.base import BaseModel, BaseManager
+from .base import BaseModel, BaseManager
 import os
 
 
@@ -69,7 +70,10 @@ class FileManager(BaseManager):
             Any: The path to the created file.
         """
         m._id = self._get_id(m.__class__)  # set ID!!!!
-        pass
+        path = self._get_file_path(m._id, m.__class__)
+        with open(path, "wb") as f:
+            pickle.dump(m, f)
+            return path
 
     def read(self, id: int, model_cls: type) -> BaseModel:
         """
@@ -82,7 +86,13 @@ class FileManager(BaseManager):
         Returns:
             BaseModel: The model instance.
         """
-        pass
+        path = self._get_file_path(id, model_cls)
+        try:
+            with open(path, 'rb') as f:
+                file_contents = pickle.load(f)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"File with ID {id} does not exist.")
+        return file_contents
 
     def update(self, m: BaseModel) -> None:
         """
@@ -91,7 +101,11 @@ class FileManager(BaseManager):
         Args:
             m (BaseModel): The model instance to update.
         """
-        pass
+        path = self._get_file_path(m._id, m.__class__)
+
+        with open(path, "wb") as f:
+            return pickle.dump(m, f)
+
 
     def delete(self, id: int, model_cls: type) -> None:
         """
@@ -101,7 +115,11 @@ class FileManager(BaseManager):
             id (int): The ID of the model instance to delete.
             model_cls (type): The type of the model instance.
         """
-        pass
+        try:
+            os.remove(self._get_file_path(id, model_cls))
+
+        except FileNotFoundError:
+            print("ERROR")
 
     def read_all(self, model_cls: type = None) -> Generator:
         """
@@ -113,7 +131,14 @@ class FileManager(BaseManager):
         Yields:
             BaseModel: The next model instance.
         """
-        pass
+
+        for item in os.listdir(self.files_root):
+            path = os.path.join(self.files_root, item)
+            if os.path.isfile(path):
+                with open(path, "rb") as f:
+                    yield pickle.load(f)
+
+
 
     def truncate(self, model_cls: type) -> None:
         """
