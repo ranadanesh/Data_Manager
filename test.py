@@ -1,7 +1,7 @@
 import os
 import shutil
 from unittest import TestCase
-
+import unittest
 from data_manager.file_manager import FileManager, BaseModel
 
 
@@ -67,3 +67,28 @@ class FileManagerTest(TestCase):
 
         for m in models:
             self.assertIn(m, all_models)
+
+    def test4_delete(self):
+        test_model = TestModel("Test3")
+
+        self.manager.create(test_model)
+        self.manager.delete(test_model._id, test_model.__class__)
+        check = os.path.exists(self.manager._get_file_path(test_model._id, test_model.__class__))
+        self.assertFalse(check)
+
+    def test5_update(self):
+        test_model = TestModel("Test4")
+
+        self.manager.create(test_model)
+        test_model
+        self.manager.update()
+        read_second = self.manager.read(test_model._id, test_model.__class__)
+        self.assertNotEqual(test_model, read_second)
+
+
+
+
+
+
+if __name__ == "__main__":
+    unittest.main()
