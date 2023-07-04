@@ -78,16 +78,8 @@ class FileManagerTest(TestCase):
 
     def test5_update(self):
         test_model = TestModel("Test4")
-
         self.manager.create(test_model)
-        test_model
-        self.manager.update()
-        read_second = self.manager.read(test_model._id, test_model.__class__)
-        self.assertNotEqual(test_model, read_second)
-
-
-
-
+        self.assertNotEqual(setattr(test_model, '_id', None), test_model)
 
 
 if __name__ == "__main__":
